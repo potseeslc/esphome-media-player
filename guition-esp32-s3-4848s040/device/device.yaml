@@ -490,3 +490,76 @@ display:
       red: [11, 12, 13, 14, 0]
       green: [8, 20, 3, 46, 9, 10]
       blue: [4, 5, 6, 7, 15]
+
+# =============================================================================
+# DASHBOARD CONFIGURABLE ENTITIES FOR SWIPE-UP CONTROLS
+# =============================================================================
+# These entities will appear in Home Assistant device configuration
+# just like the "Media Player" entity, pre-filled with your specific entities
+# =============================================================================
+
+text_sensor:
+  # Light 1 Entity - Configured with your light: light.bedroom_lights
+  - platform: template
+    name: "Light 1 Entity"
+    id: light_1_entity
+    entity_category: config
+    icon: "mdi:lightbulb"
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: "light.bedroom_lights"
+    min_length: 0
+    max_length: 100
+
+  # Light 2 Entity - Configured with your light: light.becca_s_bedside
+  - platform: template
+    name: "Light 2 Entity"
+    id: light_2_entity
+    entity_category: config
+    icon: "mdi:lightbulb"
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: "light.becca_s_bedside"
+    min_length: 0
+    max_length: 100
+
+  # Light 3 Entity - Configured with your light: light.colter_s_bedside_2
+  - platform: template
+    name: "Light 3 Entity"
+    id: light_3_entity
+    entity_category: config
+    icon: "mdi:lightbulb"
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: "light.colter_s_bedside_2"
+    min_length: 0
+    max_length: 100
+
+  # Scene 1 Entity - Configured with your scene: scene.in_bed
+  - platform: template
+    name: "Scene 1 Entity"
+    id: scene_1_entity
+    entity_category: config
+    icon: "mdi:palette"
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: "scene.in_bed"
+    min_length: 0
+    max_length: 100
+
+  # Scene 2 Entity - Configured with your scene: scene.good_night
+  - platform: template
+    name: "Scene 2 Entity"
+    id: scene_2_entity
+    entity_category: config
+    icon: "mdi:palette"
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: "scene.good_night"
+    min_length: 0
+    max_length: 100
