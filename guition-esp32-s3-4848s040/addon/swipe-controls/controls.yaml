@@ -38,9 +38,6 @@ globals:
   - id: panel_visible
     type: bool
     initial_value: 'false'
-  - id: panel_y_position
-    type: int
-    initial_value: '480'
 
 # Script to toggle the visibility of the controls panel
 script:
@@ -49,33 +46,11 @@ script:
       - lambda: |-
           if (id(panel_visible)) {
             id(panel_visible) = false;
-            // Animate panel sliding down
-            for (int i = 0; i <= 10; i++) {
-              int y_pos = 280 + (i * 20); // From 280 to 480
-              lv_obj_set_y(lv_obj_get_child(id(main_page), 1), y_pos);
-              delay(15);
-            }
+            lv_obj_set_y(id(controls_panel), 480);
           } else {
             id(panel_visible) = true;
-            // Animate panel sliding up
-            for (int i = 0; i <= 10; i++) {
-              int y_pos = 480 - (i * 20); // From 480 to 280
-              lv_obj_set_y(lv_obj_get_child(id(main_page), 1), y_pos);
-              delay(15);
-            }
+            lv_obj_set_y(id(controls_panel), 280);
           }
-          
-  - id: show_controls_panel
-    then:
-      - lambda: |-
-          id(panel_visible) = true;
-          lv_obj_set_y(lv_obj_get_child(id(main_page), 1), 280);
-          
-  - id: hide_controls_panel
-    then:
-      - lambda: |-
-          id(panel_visible) = false;
-          lv_obj_set_y(lv_obj_get_child(id(main_page), 1), 480);
 
 # Additional LVGL components for swipe detection and controls panel
 # Update the existing LVGL section by adding our components
@@ -95,13 +70,13 @@ lvgl:
         widgets:
           - label:
               text: "Swipe Up for Controls"
-              align: center
+              align: LV_ALIGN_CENTER
               x: 0
               y: 15
               width: 480
-              text_align: center
+              text_align: LV_TEXT_ALIGN_CENTER
               text_color: 0xAAAAAA
-              text_font: roboto14_font
+              text_font: roboto19_font
     
     # Add controls panel that appears when swiped up
     - obj:
@@ -111,7 +86,7 @@ lvgl:
         width: 480
         height: 200
         bg_color: 0x1a1a1a
-        bg_opa: 100%
+        bg_opa: 255
         border_width: 1
         border_color: 0x333333
         radius: 10
@@ -120,12 +95,12 @@ lvgl:
           # Header with title
           - label:
               text: "Room Controls"
-              align: center
+              align: LV_ALIGN_CENTER
               x: 0
               y: 10
               width: 480
-              text_align: center
-              text_font: roboto22_font
+              text_align: LV_TEXT_ALIGN_CENTER
+              text_font: roboto30_font
               text_color: 0xFFFFFF
           
           # Close button
@@ -136,7 +111,7 @@ lvgl:
               width: 30
               height: 30
               bg_color: 0xFF0000
-              bg_opa: 80%
+              bg_opa: 204
               border_width: 0
               radius: 15
               clickable: true
@@ -145,9 +120,9 @@ lvgl:
               widgets:
                 - label:
                     text: "X"
-                    align: center
+                    align: LV_ALIGN_CENTER
                     text_color: 0xFFFFFF
-                    text_font: roboto16_font
+                    text_font: roboto19_font
           
           # Section headers
           - label:
@@ -155,14 +130,14 @@ lvgl:
               x: 20
               y: 50
               text_color: 0xCCCCCC
-              text_font: roboto16_font
+              text_font: roboto19_font
           
           - label:
               text: "Scenes"
               x: 250
               y: 50
               text_color: 0xCCCCCC
-              text_font: roboto16_font
+              text_font: roboto19_font
           
           # Light control buttons (configured via Home Assistant)
           - button:
@@ -172,7 +147,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x333333
-              bg_opa: 100%
+              bg_opa: 255
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -189,12 +164,12 @@ lvgl:
               widgets:
                 - label:
                     text: "Light 1"
-                    align: center
+                    align: LV_ALIGN_CENTER
                     y: 15
                     width: 70
-                    text_align: center
+                    text_align: LV_TEXT_ALIGN_CENTER
                     text_color: 0xFFFFFF
-                    text_font: roboto14_font
+                    text_font: roboto19_font
           
           - button:
               id: light2_button
@@ -203,7 +178,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x333333
-              bg_opa: 100%
+              bg_opa: 255
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -220,12 +195,12 @@ lvgl:
               widgets:
                 - label:
                     text: "Light 2"
-                    align: center
+                    align: LV_ALIGN_CENTER
                     y: 15
                     width: 70
-                    text_align: center
+                    text_align: LV_TEXT_ALIGN_CENTER
                     text_color: 0xFFFFFF
-                    text_font: roboto14_font
+                    text_font: roboto19_font
           
           - button:
               id: light3_button
@@ -234,7 +209,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x333333
-              bg_opa: 100%
+              bg_opa: 255
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -251,12 +226,12 @@ lvgl:
               widgets:
                 - label:
                     text: "Light 3"
-                    align: center
+                    align: LV_ALIGN_CENTER
                     y: 15
                     width: 70
-                    text_align: center
+                    text_align: LV_TEXT_ALIGN_CENTER
                     text_color: 0xFFFFFF
-                    text_font: roboto14_font
+                    text_font: roboto19_font
           
           # Scene buttons (configured via Home Assistant)
           - button:
@@ -266,7 +241,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x336699
-              bg_opa: 100%
+              bg_opa: 255
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -283,12 +258,12 @@ lvgl:
               widgets:
                 - label:
                     text: "Scene 1"
-                    align: center
+                    align: LV_ALIGN_CENTER
                     y: 15
                     width: 70
-                    text_align: center
+                    text_align: LV_TEXT_ALIGN_CENTER
                     text_color: 0xFFFFFF
-                    text_font: roboto14_font
+                    text_font: roboto19_font
           
           - button:
               id: scene2_button
@@ -297,7 +272,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x996633
-              bg_opa: 100%
+              bg_opa: 255
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -314,9 +289,9 @@ lvgl:
               widgets:
                 - label:
                     text: "Scene 2"
-                    align: center
+                    align: LV_ALIGN_CENTER
                     y: 15
                     width: 70
-                    text_align: center
+                    text_align: LV_TEXT_ALIGN_CENTER
                     text_color: 0xFFFFFF
-                    text_font: roboto14_font
+                    text_font: roboto19_font
