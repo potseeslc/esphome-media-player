@@ -5,24 +5,8 @@
 # Configure entities through Home Assistant device settings
 # =============================================================================
 
-# Variable to track panel state
-globals:
-  - id: panel_visible
-    type: bool
-    initial_value: 'false'
-
-# Script to toggle the visibility of the controls panel
-script:
-  - id: toggle_controls_panel
-    then:
-      - lambda: |-
-          if (id(panel_visible)) {
-            id(panel_visible) = false;
-            lv_obj_set_y(id(controls_panel), 480);
-          } else {
-            id(panel_visible) = true;
-            lv_obj_set_y(id(controls_panel), 280);
-          }
+# Variable to track panel state (using existing globals from device.yaml)
+# The toggle_controls_panel script is defined in device.yaml with full animation support
 
 # Additional LVGL components for swipe detection and controls panel
 # These will be merged into the main lvgl configuration
