@@ -93,23 +93,21 @@ script:
 
           // --- Helper: subscribe to a text attribute ---
           auto sub_text = [&](const std::string &attr, esphome::text_sensor::TextSensor *sensor) {
-            esphome::api::global_api_server->subscribe_home_assistant_state(
-                entity, esphome::optional<std::string>(attr),
-                [gen, gen_ptr, sensor](const std::string &state) {
-                  if (gen != *gen_ptr) return;
-                  sensor->publish_state(state);
-                });
+            std::function<void(const std::string &)> callback = [gen, gen_ptr, sensor](const std::string &state) {
+              if (gen != *gen_ptr) return;
+              sensor->publish_state(state);
+            };
+            esphome::api::global_api_server->subscribe_home_assistant_state(entity, esphome::optional<std::string>(attr), callback);
           };
 
           // --- Helper: subscribe to a numeric attribute ---
           auto sub_num = [&](const std::string &attr, esphome::sensor::Sensor *sensor) {
-            esphome::api::global_api_server->subscribe_home_assistant_state(
-                entity, esphome::optional<std::string>(attr),
-                [gen, gen_ptr, sensor](const std::string &state) {
-                  if (gen != *gen_ptr) return;
-                  auto v = esphome::parse_number<float>(state);
-                  if (v.has_value()) sensor->publish_state(v.value());
-                });
+            std::function<void(const std::string &)> callback = [gen, gen_ptr, sensor](const std::string &state) {
+              if (gen != *gen_ptr) return;
+              auto v = esphome::parse_number<float>(state);
+              if (v.has_value()) sensor->publish_state(v.value());
+            };
+            esphome::api::global_api_server->subscribe_home_assistant_state(entity, esphome::optional<std::string>(attr), callback);
           };
 
           // --- Subscribe to all 8 media player attributes ---
@@ -118,12 +116,11 @@ script:
           sub_text("entity_picture", id(media_entity_picture_sensor));
 
           // Main state (playing/paused/idle) â€” empty attribute = entity state
-          esphome::api::global_api_server->subscribe_home_assistant_state(
-              entity, esphome::optional<std::string>(""),
-              [gen, gen_ptr](const std::string &state) {
-                if (gen != *gen_ptr) return;
-                id(media_player_state_sensor).publish_state(state);
-              });
+          std::function<void(const std::string &)> main_callback = [gen, gen_ptr](const std::string &state) {
+            if (gen != *gen_ptr) return;
+            id(media_player_state_sensor).publish_state(state);
+          };
+          esphome::api::global_api_server->subscribe_home_assistant_state(entity, esphome::optional<std::string>(""), main_callback);
 
           sub_text("media_position_updated_at", id(media_position_updated_at_sensor));
           sub_num("media_duration", id(media_duration_sensor));
