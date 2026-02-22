@@ -1,0 +1,357 @@
+From d5a73b19fb18c79b48140b4522c3c4530edea3a2 Mon Sep 17 00:00:00 2001
+From: Colter Wilson <colterw@gmail.com>
+Date: Sun, 22 Feb 2026 11:27:14 -0700
+Subject: [PATCH 2/2] Enhance swipe-up controls with configurable Home
+ Assistant entities
+
+---
+ .../addon/swipe-controls/README.md            |  49 +++--
+ .../addon/swipe-controls/controls.yaml        | 177 ++++++++++++------
+ 2 files changed, 146 insertions(+), 80 deletions(-)
+
+diff --git a/guition-esp32-s3-4848s040/addon/swipe-controls/README.md b/guition-esp32-s3-4848s040/addon/swipe-controls/README.md
+index dc7ab66..fdd18be 100644
+--- a/guition-esp32-s3-4848s040/addon/swipe-controls/README.md
++++ b/guition-esp32-s3-4848s040/addon/swipe-controls/README.md
+@@ -1,14 +1,15 @@
+ # Swipe-Up Controls for ESPHome Media Player
+ 
+-This addon adds swipe-up functionality to the ESPHome Media Player interface, allowing you to access lighting controls and scenes by swiping up from the bottom of the screen.
++This addon adds swipe-up functionality to the ESPHome Media Player interface, allowing you to access lighting controls and scenes by swiping up from the bottom of the screen. The controls are fully configurable through the Home Assistant device settings page.
+ 
+ ## Features
+ 
+ - Swipe detection area at the bottom of the screen
+ - Animated panel that slides up when activated
+-- Light control buttons (customizable for your setup)
+-- Scene activation buttons (customizable for your setup)
++- 3 configurable light control buttons
++- 2 configurable scene activation buttons
+ - Smooth animations for panel transitions
++- Fully configurable through Home Assistant device settings
+ 
+ ## Installation
+ 
+@@ -18,27 +19,31 @@ The swipe-up controls are automatically included when you use the modified packa
+ swipe_controls: !include addon/swipe-controls/controls.yaml
+ ```
+ 
+-## Customization
++## Configuration
+ 
+-To customize the controls for your specific Home Assistant setup:
++After flashing and connecting to Home Assistant:
+ 
+-1. **Modify the button labels** in `addon/swipe-controls/controls.yaml` to match your light and scene names
+-2. **Update the button IDs** to match your Home Assistant entity IDs
+-3. **Change colors** to match your theme preferences
+-4. **Add more buttons** if needed by duplicating the existing button structures
++1. Go to **Settings > Devices & Services > ESPHome** and click on your device
++2. Under the **Configuration** section, you'll find 5 new text fields:
++   - **Light 1 Entity** - Enter the entity ID of your first light (e.g., `light.living_room`)
++   - **Light 2 Entity** - Enter the entity ID of your second light
++   - **Light 3 Entity** - Enter the entity ID of your third light
++   - **Scene 1 Entity** - Enter the entity ID of your first scene (e.g., `scene.movie_time`)
++   - **Scene 2 Entity** - Enter the entity ID of your second scene
++
++## Usage
++
++1. Swipe up from the bottom of the screen to reveal the controls panel
++2. Tap any light button to toggle that light on/off
++3. Tap any scene button to activate that scene
++4. Tap the X button or swipe down to dismiss the panel
+ 
+ ## Button Events
+ 
+-Each button currently has placeholder functionality. To connect them to your Home Assistant entities, you would add event handlers like:
++Buttons are pre-configured to work with Home Assistant entities:
+ 
+-```yaml
+-event_handlers:
+-  on_click:
+-    - homeassistant.service:
+-        service: light.toggle
+-        data:
+-          entity_id: light.your_light_entity
+-```
++- Light buttons toggle the corresponding light entity
++- Scene buttons activate the corresponding scene entity
+ 
+ ## Panel Positioning
+ 
+@@ -46,11 +51,3 @@ The panel is designed for a 480x480 display. If you're using a different display
+ - The `y` positions of elements
+ - The panel height (currently 200px)
+ - The swipe detection area position
+-
+-## Future Enhancements
+-
+-Planned improvements:
+-- Actual integration with Home Assistant entities
+-- More control types (climate, security, etc.)
+-- Customizable panel height
+-- Gestural swipe detection (instead of click)
+diff --git a/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml b/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml
+index 5f5a688..77d3b3b 100644
+--- a/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml
++++ b/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml
+@@ -2,8 +2,37 @@
+ # SWIPE-UP CONTROLS FOR LIGHTING AND SCENES
+ # =============================================================================
+ # Adds swipe-up functionality to access lighting controls and scenes
++# Configure entities through Home Assistant device settings
+ # =============================================================================
+ 
++# Text sensors for storing entity IDs (set these in Home Assistant device settings)
++text_sensor:
++  - platform: template
++    id: light_1_entity
++    name: "Light 1 Entity"
++    update_interval: never
++    entity_category: "config"
++  - platform: template
++    id: light_2_entity
++    name: "Light 2 Entity"
++    update_interval: never
++    entity_category: "config"
++  - platform: template
++    id: light_3_entity
++    name: "Light 3 Entity"
++    update_interval: never
++    entity_category: "config"
++  - platform: template
++    id: scene_1_entity
++    name: "Scene 1 Entity"
++    update_interval: never
++    entity_category: "config"
++  - platform: template
++    id: scene_2_entity
++    name: "Scene 2 Entity"
++    update_interval: never
++    entity_category: "config"
++
+ # Animation for sliding the controls panel in and out
+ animation:
+   - id: slide_up_animation
+@@ -153,124 +182,164 @@ lvgl:
+               text_color: 0xCCCCCC
+               text_font: roboto16_font
+           
+-          # Light control buttons (examples - you'll customize these for your setup)
++          # Light control buttons (configured via Home Assistant)
+           - button:
+               id: light1_button
+-              x: 50
++              x: 20
+               y: 80
+-              width: 80
+-              height: 80
++              width: 70
++              height: 70
+               bg_color: 0x333333
+               bg_opa: 100%
+               border_width: 1
+               border_color: 0x555555
+-              radius: 40
++              radius: 35
+               clickable: true
++              event_handlers:
++                on_click:
++                  - if:
++                      condition:
++                        lambda: 'return strlen(id(light_1_entity).state.c_str()) > 0;'
++                      then:
++                        - homeassistant.service:
++                            service: light.toggle
++                            data:
++                              entity_id: !lambda 'return id(light_1_entity).state;'
+               widgets:
+                 - label:
+                     text: "Light 1"
+                     align: center
+-                    y: 25
+-                    width: 80
++                    y: 15
++                    width: 70
+                     text_align: center
+                     text_color: 0xFFFFFF
+                     text_font: roboto14_font
+-                - label:
+-                    text: "Toggle"
+-                    align: center
+-                    y: 45
+-                    width: 80
+-                    text_align: center
+-                    text_color: 0xAAAAAA
+-                    text_font: roboto12_font
+           
+           - button:
+               id: light2_button
+-              x: 150
++              x: 100
+               y: 80
+-              width: 80
+-              height: 80
++              width: 70
++              height: 70
+               bg_color: 0x333333
+               bg_opa: 100%
+               border_width: 1
+               border_color: 0x555555
+-              radius: 40
++              radius: 35
+               clickable: true
++              event_handlers:
++                on_click:
++                  - if:
++                      condition:
++                        lambda: 'return strlen(id(light_2_entity).state.c_str()) > 0;'
++                      then:
++                        - homeassistant.service:
++                            service: light.toggle
++                            data:
++                              entity_id: !lambda 'return id(light_2_entity).state;'
+               widgets:
+                 - label:
+                     text: "Light 2"
+                     align: center
+-                    y: 25
+-                    width: 80
++                    y: 15
++                    width: 70
+                     text_align: center
+                     text_color: 0xFFFFFF
+                     text_font: roboto14_font
++          
++          - button:
++              id: light3_button
++              x: 180
++              y: 80
++              width: 70
++              height: 70
++              bg_color: 0x333333
++              bg_opa: 100%
++              border_width: 1
++              border_color: 0x555555
++              radius: 35
++              clickable: true
++              event_handlers:
++                on_click:
++                  - if:
++                      condition:
++                        lambda: 'return strlen(id(light_3_entity).state.c_str()) > 0;'
++                      then:
++                        - homeassistant.service:
++                            service: light.toggle
++                            data:
++                              entity_id: !lambda 'return id(light_3_entity).state;'
++              widgets:
+                 - label:
+-                    text: "Toggle"
++                    text: "Light 3"
+                     align: center
+-                    y: 45
+-                    width: 80
++                    y: 15
++                    width: 70
+                     text_align: center
+-                    text_color: 0xAAAAAA
+-                    text_font: roboto12_font
++                    text_color: 0xFFFFFF
++                    text_font: roboto14_font
+           
+-          # Scene buttons (examples - you'll customize these for your setup)
++          # Scene buttons (configured via Home Assistant)
+           - button:
+               id: scene1_button
+               x: 270
+               y: 80
+-              width: 80
+-              height: 80
++              width: 70
++              height: 70
+               bg_color: 0x336699
+               bg_opa: 100%
+               border_width: 1
+               border_color: 0x555555
+-              radius: 40
++              radius: 35
+               clickable: true
++              event_handlers:
++                on_click:
++                  - if:
++                      condition:
++                        lambda: 'return strlen(id(scene_1_entity).state.c_str()) > 0;'
++                      then:
++                        - homeassistant.service:
++                            service: scene.turn_on
++                            data:
++                              entity_id: !lambda 'return id(scene_1_entity).state;'
+               widgets:
+                 - label:
+                     text: "Scene 1"
+                     align: center
+-                    y: 25
+-                    width: 80
++                    y: 15
++                    width: 70
+                     text_align: center
+                     text_color: 0xFFFFFF
+                     text_font: roboto14_font
+-                - label:
+-                    text: "Activate"
+-                    align: center
+-                    y: 45
+-                    width: 80
+-                    text_align: center
+-                    text_color: 0xAAAAAA
+-                    text_font: roboto12_font
+           
+           - button:
+               id: scene2_button
+-              x: 370
++              x: 350
+               y: 80
+-              width: 80
+-              height: 80
++              width: 70
++              height: 70
+               bg_color: 0x996633
+               bg_opa: 100%
+               border_width: 1
+               border_color: 0x555555
+-              radius: 40
++              radius: 35
+               clickable: true
++              event_handlers:
++                on_click:
++                  - if:
++                      condition:
++                        lambda: 'return strlen(id(scene_2_entity).state.c_str()) > 0;'
++                      then:
++                        - homeassistant.service:
++                            service: scene.turn_on
++                            data:
++                              entity_id: !lambda 'return id(scene_2_entity).state;'
+               widgets:
+                 - label:
+                     text: "Scene 2"
+                     align: center
+-                    y: 25
+-                    width: 80
++                    y: 15
++                    width: 70
+                     text_align: center
+                     text_color: 0xFFFFFF
+                     text_font: roboto14_font
+-                - label:
+-                    text: "Activate"
+-                    align: center
+-                    y: 45
+-                    width: 80
+-                    text_align: center
+-                    text_color: 0xAAAAAA
+-                    text_font: roboto12_font
+-- 
+2.52.0
+

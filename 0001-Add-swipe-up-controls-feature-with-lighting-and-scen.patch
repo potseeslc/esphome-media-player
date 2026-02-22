@@ -1,0 +1,570 @@
+From 98dee02fabaa88e80bcbc192b0cecc59a346b588 Mon Sep 17 00:00:00 2001
+From: Colter Wilson <colterw@gmail.com>
+Date: Sun, 22 Feb 2026 11:17:32 -0700
+Subject: [PATCH 1/2] Add swipe-up controls feature with lighting and scene
+ controls
+
+---
+ README.md                                     |  48 ++-
+ .../addon/swipe-controls/README.md            |  56 ++++
+ .../addon/swipe-controls/controls.yaml        | 276 ++++++++++++++++++
+ .../ha_integration_example.yaml               | 117 ++++++++
+ guition-esp32-s3-4848s040/packages.yaml       |   3 +-
+ 5 files changed, 498 insertions(+), 2 deletions(-)
+ create mode 100644 guition-esp32-s3-4848s040/addon/swipe-controls/README.md
+ create mode 100644 guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml
+ create mode 100644 guition-esp32-s3-4848s040/addon/swipe-controls/ha_integration_example.yaml
+
+diff --git a/README.md b/README.md
+index 71c9be1..67bfba7 100644
+--- a/README.md
++++ b/README.md
+@@ -46,6 +46,7 @@ When a new track starts, the overlay (title, artist, time, play/pause button) au
+ - **Next / Previous track** -- swipe the screen to change tracks. 
+ - **Volume** -- swipe down to open the settings panel, which shows an interactive arc dial. Drag the arc knob to set volume, or use the **+** and **-** buttons for fine 1% adjustments. The current volume percentage is displayed in the centre of the dial. Swipe up to close.
+ - Hide / ShowUI -- Tap anywhere when the track is playing to hide the UI information.
++- **Room Controls** -- swipe up from the bottom of the screen to access lighting and scene controls. *(Enhanced feature - see [Swipe-Up Controls](#swipe-up-controls) below)*
+ 
+ ### Screensaver
+ 
+@@ -130,6 +131,51 @@ The device automatically checks for firmware updates every 6 hours. When an upda
+ 
+ ---
+ 
++## Swipe-Up Controls
++
++This enhanced version of the ESPHome Media Player includes swipe-up controls that allow you to access lighting and scene controls directly from the bottom of the screen.
++
++### Features
++
++* **Swipe Detection Area** - A designated area at the bottom of the screen that detects when you swipe up
++* **Animated Control Panel** - A panel that smoothly slides up to reveal your room controls
++* **Lighting Controls** - Buttons to toggle your lights on/off
++* **Scene Activation** - Buttons to activate predefined Home Assistant scenes
++* **Customizable Interface** - Easily modify the buttons to match your specific Home Assistant entities
++
++### How It Works
++
++1. When you swipe up from the bottom of the screen, a control panel slides up from the bottom
++2. The panel contains buttons for your lights and scenes
++3. Tap any button to control your Home Assistant entities
++4. Swipe down or tap the X button to dismiss the panel
++
++### Customization
++
++To customize the swipe-up controls for your specific setup:
++
++1. Edit `addon/swipe-controls/controls.yaml` to modify the buttons and their actions
++2. Update button labels to match your light and scene names
++3. Connect buttons to your actual Home Assistant entities using the `homeassistant.service` action
++4. Adjust colors and positioning to match your preferences
++
++See `addon/swipe-controls/ha_integration_example.yaml` for examples of connecting buttons to Home Assistant entities.
++
++### Example Integration
++
++To connect a button to a Home Assistant light entity:
++
++```yaml
++event_handlers:
++  on_click:
++    - homeassistant.service:
++        service: light.toggle
++        data:
++          entity_id: light.your_light_entity
++```
++
++---
++
+ ## Configurable Settings
+ 
+ ### Media Player Selection (configurable at runtime)
+@@ -200,4 +246,4 @@ If you have any feedback or suggestions, please just log an issue.
+ 
+ ![Volume Controls](images/guition-esp32-s3-4848s040-volume.jpg)
+ ![Example Media](images/guition-esp32-s3-4848s040-example2.jpg)
+-![Example Media](images/guition-esp32-s3-4848s040-example3.jpg)
+\ No newline at end of file
++![Example Media](images/guition-esp32-s3-4848s040-example3.jpg)
+diff --git a/guition-esp32-s3-4848s040/addon/swipe-controls/README.md b/guition-esp32-s3-4848s040/addon/swipe-controls/README.md
+new file mode 100644
+index 0000000..dc7ab66
+--- /dev/null
++++ b/guition-esp32-s3-4848s040/addon/swipe-controls/README.md
+@@ -0,0 +1,56 @@
++# Swipe-Up Controls for ESPHome Media Player
++
++This addon adds swipe-up functionality to the ESPHome Media Player interface, allowing you to access lighting controls and scenes by swiping up from the bottom of the screen.
++
++## Features
++
++- Swipe detection area at the bottom of the screen
++- Animated panel that slides up when activated
++- Light control buttons (customizable for your setup)
++- Scene activation buttons (customizable for your setup)
++- Smooth animations for panel transitions
++
++## Installation
++
++The swipe-up controls are automatically included when you use the modified packages.yaml file that includes:
++
++```yaml
++swipe_controls: !include addon/swipe-controls/controls.yaml
++```
++
++## Customization
++
++To customize the controls for your specific Home Assistant setup:
++
++1. **Modify the button labels** in `addon/swipe-controls/controls.yaml` to match your light and scene names
++2. **Update the button IDs** to match your Home Assistant entity IDs
++3. **Change colors** to match your theme preferences
++4. **Add more buttons** if needed by duplicating the existing button structures
++
++## Button Events
++
++Each button currently has placeholder functionality. To connect them to your Home Assistant entities, you would add event handlers like:
++
++```yaml
++event_handlers:
++  on_click:
++    - homeassistant.service:
++        service: light.toggle
++        data:
++          entity_id: light.your_light_entity
++```
++
++## Panel Positioning
++
++The panel is designed for a 480x480 display. If you're using a different display size, you may need to adjust:
++- The `y` positions of elements
++- The panel height (currently 200px)
++- The swipe detection area position
++
++## Future Enhancements
++
++Planned improvements:
++- Actual integration with Home Assistant entities
++- More control types (climate, security, etc.)
++- Customizable panel height
++- Gestural swipe detection (instead of click)
+diff --git a/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml b/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml
+new file mode 100644
+index 0000000..5f5a688
+--- /dev/null
++++ b/guition-esp32-s3-4848s040/addon/swipe-controls/controls.yaml
+@@ -0,0 +1,276 @@
++# =============================================================================
++# SWIPE-UP CONTROLS FOR LIGHTING AND SCENES
++# =============================================================================
++# Adds swipe-up functionality to access lighting controls and scenes
++# =============================================================================
++
++# Animation for sliding the controls panel in and out
++animation:
++  - id: slide_up_animation
++    duration: 300
++    playback: once
++    repeat: 0
++    start_value: 480
++    end_value: 280
++    on_progress:
++      - lvgl.widget.update:
++          id: controls_panel
++          y: !lambda |-
++            return (int)x;
++  
++  - id: slide_down_animation
++    duration: 300
++    playback: once
++    repeat: 0
++    start_value: 280
++    end_value: 480
++    on_progress:
++      - lvgl.widget.update:
++          id: controls_panel
++          y: !lambda |-
++            return (int)x;
++
++# Variable to track panel state
++globals:
++  - id: panel_visible
++    type: bool
++    initial_value: 'false'
++
++# Script to toggle the visibility of the controls panel
++script:
++  - id: toggle_controls_panel
++    then:
++      - lambda: |-
++          if (id(panel_visible)) {
++            id(slide_down_animation).start();
++            id(panel_visible) = false;
++          } else {
++            id(slide_up_animation).start();
++            id(panel_visible) = true;
++          }
++          
++  - id: show_controls_panel
++    then:
++      - lvgl.widget.update:
++          id: controls_panel
++          y: 280
++      - lambda: |-
++          id(panel_visible) = true;
++          
++  - id: hide_controls_panel
++    then:
++      - lvgl.widget.update:
++          id: controls_panel
++          y: 480
++      - lambda: |-
++          id(panel_visible) = false;
++
++# Additional LVGL components for swipe detection and controls panel
++lvgl:
++  widgets:
++    # Swipe detection area at the bottom of the screen
++    - obj:
++        id: swipe_detection_area
++        x: 0
++        y: 430  # Positioned at the bottom (480px height - 50px height)
++        width: 480
++        height: 50
++        clickable: true
++        event_handlers:
++          on_click:
++            - logger.log: "Swipe detection area clicked"
++            - script.execute: toggle_controls_panel
++        widgets:
++          - label:
++              text: "Swipe Up for Controls"
++              align: center
++              x: 0
++              y: 15
++              width: 480
++              text_align: center
++              text_color: 0xAAAAAA
++              text_font: roboto14_font
++    
++    # Controls panel that appears when swiped up
++    - obj:
++        id: controls_panel
++        x: 0
++        y: 480  # Initially hidden below the screen
++        width: 480
++        height: 200
++        bg_color: 0x1a1a1a
++        bg_opa: 100%
++        border_width: 1
++        border_color: 0x333333
++        radius: 10
++        clickable: true
++        widgets:
++          # Header with title
++          - label:
++              text: "Room Controls"
++              align: center
++              x: 0
++              y: 10
++              width: 480
++              text_align: center
++              text_font: roboto22_font
++              text_color: 0xFFFFFF
++          
++          # Close button
++          - button:
++              id: close_controls_button
++              x: 440
++              y: 10
++              width: 30
++              height: 30
++              bg_color: 0xFF0000
++              bg_opa: 80%
++              border_width: 0
++              radius: 15
++              clickable: true
++              event_handlers:
++                on_click:
++                  - script.execute: toggle_controls_panel
++              widgets:
++                - label:
++                    text: "X"
++                    align: center
++                    text_color: 0xFFFFFF
++                    text_font: roboto16_font
++          
++          # Section headers
++          - label:
++              text: "Lights"
++              x: 20
++              y: 50
++              text_color: 0xCCCCCC
++              text_font: roboto16_font
++          
++          - label:
++              text: "Scenes"
++              x: 250
++              y: 50
++              text_color: 0xCCCCCC
++              text_font: roboto16_font
++          
++          # Light control buttons (examples - you'll customize these for your setup)
++          - button:
++              id: light1_button
++              x: 50
++              y: 80
++              width: 80
++              height: 80
++              bg_color: 0x333333
++              bg_opa: 100%
++              border_width: 1
++              border_color: 0x555555
++              radius: 40
++              clickable: true
++              widgets:
++                - label:
++                    text: "Light 1"
++                    align: center
++                    y: 25
++                    width: 80
++                    text_align: center
++                    text_color: 0xFFFFFF
++                    text_font: roboto14_font
++                - label:
++                    text: "Toggle"
++                    align: center
++                    y: 45
++                    width: 80
++                    text_align: center
++                    text_color: 0xAAAAAA
++                    text_font: roboto12_font
++          
++          - button:
++              id: light2_button
++              x: 150
++              y: 80
++              width: 80
++              height: 80
++              bg_color: 0x333333
++              bg_opa: 100%
++              border_width: 1
++              border_color: 0x555555
++              radius: 40
++              clickable: true
++              widgets:
++                - label:
++                    text: "Light 2"
++                    align: center
++                    y: 25
++                    width: 80
++                    text_align: center
++                    text_color: 0xFFFFFF
++                    text_font: roboto14_font
++                - label:
++                    text: "Toggle"
++                    align: center
++                    y: 45
++                    width: 80
++                    text_align: center
++                    text_color: 0xAAAAAA
++                    text_font: roboto12_font
++          
++          # Scene buttons (examples - you'll customize these for your setup)
++          - button:
++              id: scene1_button
++              x: 270
++              y: 80
++              width: 80
++              height: 80
++              bg_color: 0x336699
++              bg_opa: 100%
++              border_width: 1
++              border_color: 0x555555
++              radius: 40
++              clickable: true
++              widgets:
++                - label:
++                    text: "Scene 1"
++                    align: center
++                    y: 25
++                    width: 80
++                    text_align: center
++                    text_color: 0xFFFFFF
++                    text_font: roboto14_font
++                - label:
++                    text: "Activate"
++                    align: center
++                    y: 45
++                    width: 80
++                    text_align: center
++                    text_color: 0xAAAAAA
++                    text_font: roboto12_font
++          
++          - button:
++              id: scene2_button
++              x: 370
++              y: 80
++              width: 80
++              height: 80
++              bg_color: 0x996633
++              bg_opa: 100%
++              border_width: 1
++              border_color: 0x555555
++              radius: 40
++              clickable: true
++              widgets:
++                - label:
++                    text: "Scene 2"
++                    align: center
++                    y: 25
++                    width: 80
++                    text_align: center
++                    text_color: 0xFFFFFF
++                    text_font: roboto14_font
++                - label:
++                    text: "Activate"
++                    align: center
++                    y: 45
++                    width: 80
++                    text_align: center
++                    text_color: 0xAAAAAA
++                    text_font: roboto12_font
+diff --git a/guition-esp32-s3-4848s040/addon/swipe-controls/ha_integration_example.yaml b/guition-esp32-s3-4848s040/addon/swipe-controls/ha_integration_example.yaml
+new file mode 100644
+index 0000000..63d805a
+--- /dev/null
++++ b/guition-esp32-s3-4848s040/addon/swipe-controls/ha_integration_example.yaml
+@@ -0,0 +1,117 @@
++# =============================================================================
++# HOME ASSISTANT ENTITY INTEGRATION EXAMPLE
++# =============================================================================
++# Example showing how to connect buttons to actual Home Assistant entities
++# =============================================================================
++
++# This file shows example integrations but should NOT be included directly
++# Instead, copy the relevant parts to your device configuration
++
++# Example button with Home Assistant integration
++# - button:
++#     id: bedroom_light_button
++#     x: 50
++#     y: 80
++#     width: 80
++#     height: 80
++#     bg_color: 0x333333
++#     bg_opa: 100%
++#     border_width: 1
++#     border_color: 0x555555
++#     radius: 40
++#     clickable: true
++#     event_handlers:
++#       on_click:
++#         - homeassistant.service:
++#             service: light.toggle
++#             data:
++#               entity_id: light.bedroom_light
++#     widgets:
++#       - label:
++#           text: "Bedroom"
++#           align: center
++#           y: 25
++#           width: 80
++#           text_align: center
++#           text_color: 0xFFFFFF
++#           text_font: roboto14_font
++#       - label:
++#           text: "Toggle"
++#           align: center
++#           y: 45
++#           width: 80
++#           text_align: center
++#           text_color: 0xAAAAAA
++#           text_font: roboto12_font
++
++# Example scene button with Home Assistant integration
++# - button:
++#     id: movie_time_scene_button
++#     x: 270
++#     y: 80
++#     width: 80
++#     height: 80
++#     bg_color: 0x336699
++#     bg_opa: 100%
++#     border_width: 1
++#     border_color: 0x555555
++#     radius: 40
++#     clickable: true
++#     event_handlers:
++#       on_click:
++#         - homeassistant.service:
++#             service: scene.turn_on
++#             data:
++#               entity_id: scene.movie_time
++#     widgets:
++#       - label:
++#           text: "Movie"
++#           align: center
++#           y: 25
++#           width: 80
++#           text_align: center
++#           text_color: 0xFFFFFF
++#           text_font: roboto14_font
++#       - label:
++#           text: "Scene"
++#           align: center
++#           y: 45
++#           width: 80
++#           text_align: center
++#           text_color: 0xAAAAAA
++#           text_font: roboto12_font
++
++# Example script button with Home Assistant integration
++# - button:
++#     id: goodnight_script_button
++#     x: 370
++#     y: 80
++#     width: 80
++#     height: 80
++#     bg_color: 0x996633
++#     bg_opa: 100%
++#     border_width: 1
++#     border_color: 0x555555
++#     radius: 40
++#     clickable: true
++#     event_handlers:
++#       on_click:
++#         - homeassistant.service:
++#             service: script.goodnight
++#     widgets:
++#       - label:
++#           text: "Goodnight"
++#           align: center
++#           y: 25
++#           width: 80
++#           text_align: center
++#           text_color: 0xFFFFFF
++#           text_font: roboto14_font
++#       - label:
++#           text: "Script"
++#           align: center
++#           y: 45
++#           width: 80
++#           text_align: center
++#           text_color: 0xAAAAAA
++#           text_font: roboto12_font
+diff --git a/guition-esp32-s3-4848s040/packages.yaml b/guition-esp32-s3-4848s040/packages.yaml
+index 8138ac2..164c4c4 100644
+--- a/guition-esp32-s3-4848s040/packages.yaml
++++ b/guition-esp32-s3-4848s040/packages.yaml
+@@ -9,4 +9,5 @@ packages:
+   media_player_select: !include device/media_player_select.yaml
+   sensors: !include device/sensors.yaml
+   lvgl: !include device/lvgl.yaml
+-  button: !include theme/button.yaml
+\ No newline at end of file
++  button: !include theme/button.yaml
++  swipe_controls: !include addon/swipe-controls/controls.yaml
+-- 
+2.52.0
+
