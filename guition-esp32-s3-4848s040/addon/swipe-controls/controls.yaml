@@ -70,11 +70,11 @@ lvgl:
         widgets:
           - label:
               text: "Swipe Up for Controls"
-              align: LV_ALIGN_CENTER
+              align: center
               x: 0
               y: 15
               width: 480
-              text_align: LV_TEXT_ALIGN_CENTER
+              text_align: center
               text_color: 0xAAAAAA
               text_font: roboto19_font
     
@@ -86,7 +86,7 @@ lvgl:
         width: 480
         height: 200
         bg_color: 0x1a1a1a
-        bg_opa: 255
+        bg_opa: 100%
         border_width: 1
         border_color: 0x333333
         radius: 10
@@ -95,11 +95,11 @@ lvgl:
           # Header with title
           - label:
               text: "Room Controls"
-              align: LV_ALIGN_CENTER
+              align: center
               x: 0
               y: 10
               width: 480
-              text_align: LV_TEXT_ALIGN_CENTER
+              text_align: center
               text_font: roboto30_font
               text_color: 0xFFFFFF
           
@@ -111,7 +111,7 @@ lvgl:
               width: 30
               height: 30
               bg_color: 0xFF0000
-              bg_opa: 204
+              bg_opa: 80%
               border_width: 0
               radius: 15
               clickable: true
@@ -120,7 +120,7 @@ lvgl:
               widgets:
                 - label:
                     text: "X"
-                    align: LV_ALIGN_CENTER
+                    align: center
                     text_color: 0xFFFFFF
                     text_font: roboto19_font
           
@@ -147,7 +147,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x333333
-              bg_opa: 255
+              bg_opa: 100%
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -164,10 +164,10 @@ lvgl:
               widgets:
                 - label:
                     text: "Light 1"
-                    align: LV_ALIGN_CENTER
+                    align: center
                     y: 15
                     width: 70
-                    text_align: LV_TEXT_ALIGN_CENTER
+                    text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto19_font
           
@@ -178,7 +178,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x333333
-              bg_opa: 255
+              bg_opa: 100%
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -195,10 +195,10 @@ lvgl:
               widgets:
                 - label:
                     text: "Light 2"
-                    align: LV_ALIGN_CENTER
+                    align: center
                     y: 15
                     width: 70
-                    text_align: LV_TEXT_ALIGN_CENTER
+                    text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto19_font
           
@@ -209,7 +209,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x333333
-              bg_opa: 255
+              bg_opa: 100%
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -226,10 +226,10 @@ lvgl:
               widgets:
                 - label:
                     text: "Light 3"
-                    align: LV_ALIGN_CENTER
+                    align: center
                     y: 15
                     width: 70
-                    text_align: LV_TEXT_ALIGN_CENTER
+                    text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto19_font
           
@@ -241,7 +241,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x336699
-              bg_opa: 255
+              bg_opa: 100%
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -258,10 +258,10 @@ lvgl:
               widgets:
                 - label:
                     text: "Scene 1"
-                    align: LV_ALIGN_CENTER
+                    align: center
                     y: 15
                     width: 70
-                    text_align: LV_TEXT_ALIGN_CENTER
+                    text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto19_font
           
@@ -272,7 +272,7 @@ lvgl:
               width: 70
               height: 70
               bg_color: 0x996633
-              bg_opa: 255
+              bg_opa: 100%
               border_width: 1
               border_color: 0x555555
               radius: 35
@@ -289,9 +289,9 @@ lvgl:
               widgets:
                 - label:
                     text: "Scene 2"
-                    align: LV_ALIGN_CENTER
+                    align: center
                     y: 15
                     width: 70
-                    text_align: LV_TEXT_ALIGN_CENTER
+                    text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto19_font
