@@ -505,12 +505,8 @@ text_sensor:
     id: light_1_entity
     entity_category: config
     icon: "mdi:lightbulb"
-    mode: text
-    optimistic: true
-    restore_value: true
-    initial_value: "light.bedroom_lights"
-    min_length: 0
-    max_length: 100
+    lambda: 'return "";'
+    update_interval: never
 
   # Light 2 Entity - Configured with your light: light.becca_s_bedside
   - platform: template
@@ -518,12 +514,8 @@ text_sensor:
     id: light_2_entity
     entity_category: config
     icon: "mdi:lightbulb"
-    mode: text
-    optimistic: true
-    restore_value: true
-    initial_value: "light.becca_s_bedside"
-    min_length: 0
-    max_length: 100
+    lambda: 'return "";'
+    update_interval: never
 
   # Light 3 Entity - Configured with your light: light.colter_s_bedside_2
   - platform: template
@@ -531,12 +523,8 @@ text_sensor:
     id: light_3_entity
     entity_category: config
     icon: "mdi:lightbulb"
-    mode: text
-    optimistic: true
-    restore_value: true
-    initial_value: "light.colter_s_bedside_2"
-    min_length: 0
-    max_length: 100
+    lambda: 'return "";'
+    update_interval: never
 
   # Scene 1 Entity - Configured with your scene: scene.in_bed
   - platform: template
@@ -544,12 +532,8 @@ text_sensor:
     id: scene_1_entity
     entity_category: config
     icon: "mdi:palette"
-    mode: text
-    optimistic: true
-    restore_value: true
-    initial_value: "scene.in_bed"
-    min_length: 0
-    max_length: 100
+    lambda: 'return "";'
+    update_interval: never
 
   # Scene 2 Entity - Configured with your scene: scene.good_night
   - platform: template
@@ -557,9 +541,5 @@ text_sensor:
     id: scene_2_entity
     entity_category: config
     icon: "mdi:palette"
-    mode: text
-    optimistic: true
-    restore_value: true
-    initial_value: "scene.good_night"
-    min_length: 0
-    max_length: 100
+    lambda: 'return "";'
+    update_interval: never
