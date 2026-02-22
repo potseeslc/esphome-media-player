@@ -2,7 +2,36 @@
 # SWIPE-UP CONTROLS FOR LIGHTING AND SCENES
 # =============================================================================
 # Adds swipe-up functionality to access lighting controls and scenes
+# Configure entities through Home Assistant device settings
 # =============================================================================
+
+# Text sensors for storing entity IDs (set these in Home Assistant device settings)
+text_sensor:
+  - platform: template
+    id: light_1_entity
+    name: "Light 1 Entity"
+    update_interval: never
+    entity_category: "config"
+  - platform: template
+    id: light_2_entity
+    name: "Light 2 Entity"
+    update_interval: never
+    entity_category: "config"
+  - platform: template
+    id: light_3_entity
+    name: "Light 3 Entity"
+    update_interval: never
+    entity_category: "config"
+  - platform: template
+    id: scene_1_entity
+    name: "Scene 1 Entity"
+    update_interval: never
+    entity_category: "config"
+  - platform: template
+    id: scene_2_entity
+    name: "Scene 2 Entity"
+    update_interval: never
+    entity_category: "config"
 
 # Animation for sliding the controls panel in and out
 animation:
@@ -153,124 +182,164 @@ lvgl:
               text_color: 0xCCCCCC
               text_font: roboto16_font
           
-          # Light control buttons (examples - you'll customize these for your setup)
+          # Light control buttons (configured via Home Assistant)
           - button:
               id: light1_button
-              x: 50
+              x: 20
               y: 80
-              width: 80
-              height: 80
+              width: 70
+              height: 70
               bg_color: 0x333333
               bg_opa: 100%
               border_width: 1
               border_color: 0x555555
-              radius: 40
+              radius: 35
               clickable: true
+              event_handlers:
+                on_click:
+                  - if:
+                      condition:
+                        lambda: 'return strlen(id(light_1_entity).state.c_str()) > 0;'
+                      then:
+                        - homeassistant.service:
+                            service: light.toggle
+                            data:
+                              entity_id: !lambda 'return id(light_1_entity).state;'
               widgets:
                 - label:
                     text: "Light 1"
                     align: center
-                    y: 25
-                    width: 80
+                    y: 15
+                    width: 70
                     text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto14_font
-                - label:
-                    text: "Toggle"
-                    align: center
-                    y: 45
-                    width: 80
-                    text_align: center
-                    text_color: 0xAAAAAA
-                    text_font: roboto12_font
           
           - button:
               id: light2_button
-              x: 150
+              x: 100
               y: 80
-              width: 80
-              height: 80
+              width: 70
+              height: 70
               bg_color: 0x333333
               bg_opa: 100%
               border_width: 1
               border_color: 0x555555
-              radius: 40
+              radius: 35
               clickable: true
+              event_handlers:
+                on_click:
+                  - if:
+                      condition:
+                        lambda: 'return strlen(id(light_2_entity).state.c_str()) > 0;'
+                      then:
+                        - homeassistant.service:
+                            service: light.toggle
+                            data:
+                              entity_id: !lambda 'return id(light_2_entity).state;'
               widgets:
                 - label:
                     text: "Light 2"
                     align: center
-                    y: 25
-                    width: 80
+                    y: 15
+                    width: 70
                     text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto14_font
-                - label:
-                    text: "Toggle"
-                    align: center
-                    y: 45
-                    width: 80
-                    text_align: center
-                    text_color: 0xAAAAAA
-                    text_font: roboto12_font
           
-          # Scene buttons (examples - you'll customize these for your setup)
+          - button:
+              id: light3_button
+              x: 180
+              y: 80
+              width: 70
+              height: 70
+              bg_color: 0x333333
+              bg_opa: 100%
+              border_width: 1
+              border_color: 0x555555
+              radius: 35
+              clickable: true
+              event_handlers:
+                on_click:
+                  - if:
+                      condition:
+                        lambda: 'return strlen(id(light_3_entity).state.c_str()) > 0;'
+                      then:
+                        - homeassistant.service:
+                            service: light.toggle
+                            data:
+                              entity_id: !lambda 'return id(light_3_entity).state;'
+              widgets:
+                - label:
+                    text: "Light 3"
+                    align: center
+                    y: 15
+                    width: 70
+                    text_align: center
+                    text_color: 0xFFFFFF
+                    text_font: roboto14_font
+          
+          # Scene buttons (configured via Home Assistant)
           - button:
               id: scene1_button
               x: 270
               y: 80
-              width: 80
-              height: 80
+              width: 70
+              height: 70
               bg_color: 0x336699
               bg_opa: 100%
               border_width: 1
               border_color: 0x555555
-              radius: 40
+              radius: 35
               clickable: true
+              event_handlers:
+                on_click:
+                  - if:
+                      condition:
+                        lambda: 'return strlen(id(scene_1_entity).state.c_str()) > 0;'
+                      then:
+                        - homeassistant.service:
+                            service: scene.turn_on
+                            data:
+                              entity_id: !lambda 'return id(scene_1_entity).state;'
               widgets:
                 - label:
                     text: "Scene 1"
                     align: center
-                    y: 25
-                    width: 80
+                    y: 15
+                    width: 70
                     text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto14_font
-                - label:
-                    text: "Activate"
-                    align: center
-                    y: 45
-                    width: 80
-                    text_align: center
-                    text_color: 0xAAAAAA
-                    text_font: roboto12_font
           
           - button:
               id: scene2_button
-              x: 370
+              x: 350
               y: 80
-              width: 80
-              height: 80
+              width: 70
+              height: 70
               bg_color: 0x996633
               bg_opa: 100%
               border_width: 1
               border_color: 0x555555
-              radius: 40
+              radius: 35
               clickable: true
+              event_handlers:
+                on_click:
+                  - if:
+                      condition:
+                        lambda: 'return strlen(id(scene_2_entity).state.c_str()) > 0;'
+                      then:
+                        - homeassistant.service:
+                            service: scene.turn_on
+                            data:
+                              entity_id: !lambda 'return id(scene_2_entity).state;'
               widgets:
                 - label:
                     text: "Scene 2"
                     align: center
-                    y: 25
-                    width: 80
+                    y: 15
+                    width: 70
                     text_align: center
                     text_color: 0xFFFFFF
                     text_font: roboto14_font
-                - label:
-                    text: "Activate"
-                    align: center
-                    y: 45
-                    width: 80
-                    text_align: center
-                    text_color: 0xAAAAAA
-                    text_font: roboto12_font
