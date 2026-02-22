@@ -5,34 +5,6 @@
 # Configure entities through Home Assistant device settings
 # =============================================================================
 
-# Text sensors for storing entity IDs (set these in Home Assistant device settings)
-text_sensor:
-  - platform: template
-    id: light_1_entity
-    name: "Light 1 Entity"
-    update_interval: never
-    entity_category: "config"
-  - platform: template
-    id: light_2_entity
-    name: "Light 2 Entity"
-    update_interval: never
-    entity_category: "config"
-  - platform: template
-    id: light_3_entity
-    name: "Light 3 Entity"
-    update_interval: never
-    entity_category: "config"
-  - platform: template
-    id: scene_1_entity
-    name: "Scene 1 Entity"
-    update_interval: never
-    entity_category: "config"
-  - platform: template
-    id: scene_2_entity
-    name: "Scene 2 Entity"
-    update_interval: never
-    entity_category: "config"
-
 # Variable to track panel state
 globals:
   - id: panel_visible
