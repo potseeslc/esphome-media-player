@@ -95,9 +95,10 @@ script:
           id(panel_visible) = false;
 
 # Additional LVGL components for swipe detection and controls panel
+# Update the existing LVGL section by adding our components
 lvgl:
   widgets:
-    # Swipe detection area at the bottom of the screen
+    # Add swipe detection area at the bottom of the screen
     - obj:
         id: swipe_detection_area
         x: 0
@@ -105,10 +106,9 @@ lvgl:
         width: 480
         height: 50
         clickable: true
-        event_handlers:
-          on_click:
-            - logger.log: "Swipe detection area clicked"
-            - script.execute: toggle_controls_panel
+        on_click:
+          - logger.log: "Swipe detection area clicked"
+          - script.execute: toggle_controls_panel
         widgets:
           - label:
               text: "Swipe Up for Controls"
@@ -120,7 +120,7 @@ lvgl:
               text_color: 0xAAAAAA
               text_font: roboto14_font
     
-    # Controls panel that appears when swiped up
+    # Add controls panel that appears when swiped up
     - obj:
         id: controls_panel
         x: 0
@@ -157,9 +157,8 @@ lvgl:
               border_width: 0
               radius: 15
               clickable: true
-              event_handlers:
-                on_click:
-                  - script.execute: toggle_controls_panel
+              on_click:
+                - script.execute: toggle_controls_panel
               widgets:
                 - label:
                     text: "X"
@@ -195,16 +194,15 @@ lvgl:
               border_color: 0x555555
               radius: 35
               clickable: true
-              event_handlers:
-                on_click:
-                  - if:
-                      condition:
-                        lambda: 'return strlen(id(light_1_entity).state.c_str()) > 0;'
-                      then:
-                        - homeassistant.service:
-                            service: light.toggle
-                            data:
-                              entity_id: !lambda 'return id(light_1_entity).state;'
+              on_click:
+                - if:
+                    condition:
+                      lambda: 'return strlen(id(light_1_entity).state.c_str()) > 0;'
+                    then:
+                      - homeassistant.service:
+                          service: light.toggle
+                          data:
+                            entity_id: !lambda 'return id(light_1_entity).state;'
               widgets:
                 - label:
                     text: "Light 1"
@@ -227,16 +225,15 @@ lvgl:
               border_color: 0x555555
               radius: 35
               clickable: true
-              event_handlers:
-                on_click:
-                  - if:
-                      condition:
-                        lambda: 'return strlen(id(light_2_entity).state.c_str()) > 0;'
-                      then:
-                        - homeassistant.service:
-                            service: light.toggle
-                            data:
-                              entity_id: !lambda 'return id(light_2_entity).state;'
+              on_click:
+                - if:
+                    condition:
+                      lambda: 'return strlen(id(light_2_entity).state.c_str()) > 0;'
+                    then:
+                      - homeassistant.service:
+                          service: light.toggle
+                          data:
+                            entity_id: !lambda 'return id(light_2_entity).state;'
               widgets:
                 - label:
                     text: "Light 2"
@@ -259,16 +256,15 @@ lvgl:
               border_color: 0x555555
               radius: 35
               clickable: true
-              event_handlers:
-                on_click:
-                  - if:
-                      condition:
-                        lambda: 'return strlen(id(light_3_entity).state.c_str()) > 0;'
-                      then:
-                        - homeassistant.service:
-                            service: light.toggle
-                            data:
-                              entity_id: !lambda 'return id(light_3_entity).state;'
+              on_click:
+                - if:
+                    condition:
+                      lambda: 'return strlen(id(light_3_entity).state.c_str()) > 0;'
+                    then:
+                      - homeassistant.service:
+                          service: light.toggle
+                          data:
+                            entity_id: !lambda 'return id(light_3_entity).state;'
               widgets:
                 - label:
                     text: "Light 3"
@@ -292,16 +288,15 @@ lvgl:
               border_color: 0x555555
               radius: 35
               clickable: true
-              event_handlers:
-                on_click:
-                  - if:
-                      condition:
-                        lambda: 'return strlen(id(scene_1_entity).state.c_str()) > 0;'
-                      then:
-                        - homeassistant.service:
-                            service: scene.turn_on
-                            data:
-                              entity_id: !lambda 'return id(scene_1_entity).state;'
+              on_click:
+                - if:
+                    condition:
+                      lambda: 'return strlen(id(scene_1_entity).state.c_str()) > 0;'
+                    then:
+                      - homeassistant.service:
+                          service: scene.turn_on
+                          data:
+                            entity_id: !lambda 'return id(scene_1_entity).state;'
               widgets:
                 - label:
                     text: "Scene 1"
@@ -324,16 +319,15 @@ lvgl:
               border_color: 0x555555
               radius: 35
               clickable: true
-              event_handlers:
-                on_click:
-                  - if:
-                      condition:
-                        lambda: 'return strlen(id(scene_2_entity).state.c_str()) > 0;'
-                      then:
-                        - homeassistant.service:
-                            service: scene.turn_on
-                            data:
-                              entity_id: !lambda 'return id(scene_2_entity).state;'
+              on_click:
+                - if:
+                    condition:
+                      lambda: 'return strlen(id(scene_2_entity).state.c_str()) > 0;'
+                    then:
+                      - homeassistant.service:
+                          service: scene.turn_on
+                          data:
+                            entity_id: !lambda 'return id(scene_2_entity).state;'
               widgets:
                 - label:
                     text: "Scene 2"
