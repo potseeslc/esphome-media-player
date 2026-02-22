@@ -426,26 +426,26 @@ script:
             # Show the controls panel with animation
             - lambda: |-
                 lv_obj_clear_flag(id(controls_panel), LV_OBJ_FLAG_HIDDEN);
-                // Animate panel sliding up
+                // Animate panel sliding up (simplified without custom path)
                 lv_anim_t anim;
                 lv_anim_init(&anim);
                 lv_anim_set_var(&anim, id(controls_panel));
                 lv_anim_set_exec_cb(&anim, (lv_anim_exec_xcb_t)lv_obj_set_y);
                 lv_anim_set_values(&anim, 480, 280); // Move from bottom to visible position
                 lv_anim_set_time(&anim, 300);
-                lv_anim_set_path_type(&anim, LV_ANIM_PATH_EASE_IN_OUT);
+                lv_anim_set_path_cb(&anim, lv_anim_path_ease_in_out);
                 lv_anim_start(&anim);
           else:
             # Hide the controls panel with animation
             - lambda: |-
-                // Animate panel sliding down
+                // Animate panel sliding down (simplified without custom path)
                 lv_anim_t anim;
                 lv_anim_init(&anim);
                 lv_anim_set_var(&anim, id(controls_panel));
                 lv_anim_set_exec_cb(&anim, (lv_anim_exec_xcb_t)lv_obj_set_y);
                 lv_anim_set_values(&anim, 280, 480); // Move from visible position to bottom
                 lv_anim_set_time(&anim, 300);
-                lv_anim_set_path_type(&anim, LV_ANIM_PATH_EASE_IN_OUT);
+                lv_anim_set_path_cb(&anim, lv_anim_path_ease_in_out);
                 lv_anim_set_ready_cb(&anim, [](lv_anim_t* a) {
                   lv_obj_add_flag(id(controls_panel), LV_OBJ_FLAG_HIDDEN);
                 });
