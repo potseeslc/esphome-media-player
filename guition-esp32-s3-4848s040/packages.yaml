@@ -10,3 +10,4 @@ packages:
   sensors: !include device/sensors.yaml
   lvgl: !include device/lvgl.yaml
   button: !include theme/button.yaml
+  swipe_controls: !include addon/swipe-controls/controls.yaml

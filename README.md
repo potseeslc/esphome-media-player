@@ -46,6 +46,7 @@ When a new track starts, the overlay (title, artist, time, play/pause button) au
 - **Next / Previous track** -- swipe the screen to change tracks. 
 - **Volume** -- swipe down to open the settings panel, which shows an interactive arc dial. Drag the arc knob to set volume, or use the **+** and **-** buttons for fine 1% adjustments. The current volume percentage is displayed in the centre of the dial. Swipe up to close.
 - Hide / ShowUI -- Tap anywhere when the track is playing to hide the UI information.
+- **Room Controls** -- swipe up from the bottom of the screen to access lighting and scene controls. *(Enhanced feature - see [Swipe-Up Controls](#swipe-up-controls) below)*
 
 ### Screensaver
 
@@ -127,6 +128,51 @@ To allow the screen to control your media player (play, pause, skip, volume), yo
 ### Automatic Updates
 
 The device automatically checks for firmware updates every 6 hours. When an update is available, a **Firmware Update** entity appears in Home Assistant. You can trigger the update from there or let it notify you.
+
+---
+
+## Swipe-Up Controls
+
+This enhanced version of the ESPHome Media Player includes swipe-up controls that allow you to access lighting and scene controls directly from the bottom of the screen.
+
+### Features
+
+* **Swipe Detection Area** - A designated area at the bottom of the screen that detects when you swipe up
+* **Animated Control Panel** - A panel that smoothly slides up to reveal your room controls
+* **Lighting Controls** - Buttons to toggle your lights on/off
+* **Scene Activation** - Buttons to activate predefined Home Assistant scenes
+* **Customizable Interface** - Easily modify the buttons to match your specific Home Assistant entities
+
+### How It Works
+
+1. When you swipe up from the bottom of the screen, a control panel slides up from the bottom
+2. The panel contains buttons for your lights and scenes
+3. Tap any button to control your Home Assistant entities
+4. Swipe down or tap the X button to dismiss the panel
+
+### Customization
+
+To customize the swipe-up controls for your specific setup:
+
+1. Edit `addon/swipe-controls/controls.yaml` to modify the buttons and their actions
+2. Update button labels to match your light and scene names
+3. Connect buttons to your actual Home Assistant entities using the `homeassistant.service` action
+4. Adjust colors and positioning to match your preferences
+
+See `addon/swipe-controls/ha_integration_example.yaml` for examples of connecting buttons to Home Assistant entities.
+
+### Example Integration
+
+To connect a button to a Home Assistant light entity:
+
+```yaml
+event_handlers:
+  on_click:
+    - homeassistant.service:
+        service: light.toggle
+        data:
+          entity_id: light.your_light_entity
+```
 
 ---
 
