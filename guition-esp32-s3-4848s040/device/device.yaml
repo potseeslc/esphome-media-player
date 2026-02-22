@@ -495,51 +495,71 @@ display:
 # DASHBOARD CONFIGURABLE ENTITIES FOR SWIPE-UP CONTROLS
 # =============================================================================
 # These entities will appear in Home Assistant device configuration
-# just like the "Media Player" entity, pre-filled with your specific entities
+# just like the "Media Player" entity, editable through dashboard
 # =============================================================================
 
 text_sensor:
-  # Light 1 Entity - Configured with your light: light.bedroom_lights
+  # Light 1 Entity - Configurable through Home Assistant device settings
   - platform: template
     name: "Light 1 Entity"
     id: light_1_entity
     entity_category: config
     icon: "mdi:lightbulb"
-    lambda: 'return "";'
-    update_interval: never
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: ""
+    min_length: 0
+    max_length: 100
 
-  # Light 2 Entity - Configured with your light: light.becca_s_bedside
+  # Light 2 Entity - Configurable through Home Assistant device settings
   - platform: template
     name: "Light 2 Entity"
     id: light_2_entity
     entity_category: config
     icon: "mdi:lightbulb"
-    lambda: 'return "";'
-    update_interval: never
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: ""
+    min_length: 0
+    max_length: 100
 
-  # Light 3 Entity - Configured with your light: light.colter_s_bedside_2
+  # Light 3 Entity - Configurable through Home Assistant device settings
   - platform: template
     name: "Light 3 Entity"
     id: light_3_entity
     entity_category: config
     icon: "mdi:lightbulb"
-    lambda: 'return "";'
-    update_interval: never
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: ""
+    min_length: 0
+    max_length: 100
 
-  # Scene 1 Entity - Configured with your scene: scene.in_bed
+  # Scene 1 Entity - Configurable through Home Assistant device settings
   - platform: template
     name: "Scene 1 Entity"
     id: scene_1_entity
     entity_category: config
     icon: "mdi:palette"
-    lambda: 'return "";'
-    update_interval: never
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: ""
+    min_length: 0
+    max_length: 100
 
-  # Scene 2 Entity - Configured with your scene: scene.good_night
+  # Scene 2 Entity - Configurable through Home Assistant device settings
   - platform: template
     name: "Scene 2 Entity"
     id: scene_2_entity
     entity_category: config
     icon: "mdi:palette"
-    lambda: 'return "";'
-    update_interval: never
+    mode: text
+    optimistic: true
+    restore_value: true
+    initial_value: ""
+    min_length: 0
+    max_length: 100
