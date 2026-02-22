@@ -498,7 +498,7 @@ display:
 # just like the "Media Player" entity, editable through dashboard
 # =============================================================================
 
-text_sensor:
+text:
   # Light 1 Entity - Configurable through Home Assistant device settings
   - platform: template
     name: "Light 1 Entity"
