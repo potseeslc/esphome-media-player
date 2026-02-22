@@ -33,37 +33,14 @@ text_sensor:
     update_interval: never
     entity_category: "config"
 
-# Animation for sliding the controls panel in and out
-animation:
-  - id: slide_up_animation
-    duration: 300
-    playback: once
-    repeat: 0
-    start_value: 480
-    end_value: 280
-    on_progress:
-      - lvgl.widget.update:
-          id: controls_panel
-          y: !lambda |-
-            return (int)x;
-  
-  - id: slide_down_animation
-    duration: 300
-    playback: once
-    repeat: 0
-    start_value: 280
-    end_value: 480
-    on_progress:
-      - lvgl.widget.update:
-          id: controls_panel
-          y: !lambda |-
-            return (int)x;
-
 # Variable to track panel state
 globals:
   - id: panel_visible
     type: bool
     initial_value: 'false'
+  - id: panel_y_position
+    type: int
+    initial_value: '480'
 
 # Script to toggle the visibility of the controls panel
 script:
@@ -71,28 +48,34 @@ script:
     then:
       - lambda: |-
           if (id(panel_visible)) {
-            id(slide_down_animation).start();
             id(panel_visible) = false;
+            // Animate panel sliding down
+            for (int i = 0; i <= 10; i++) {
+              int y_pos = 280 + (i * 20); // From 280 to 480
+              lv_obj_set_y(lv_obj_get_child(id(main_page), 1), y_pos);
+              delay(15);
+            }
           } else {
-            id(slide_up_animation).start();
             id(panel_visible) = true;
+            // Animate panel sliding up
+            for (int i = 0; i <= 10; i++) {
+              int y_pos = 480 - (i * 20); // From 480 to 280
+              lv_obj_set_y(lv_obj_get_child(id(main_page), 1), y_pos);
+              delay(15);
+            }
           }
           
   - id: show_controls_panel
     then:
-      - lvgl.widget.update:
-          id: controls_panel
-          y: 280
       - lambda: |-
           id(panel_visible) = true;
+          lv_obj_set_y(lv_obj_get_child(id(main_page), 1), 280);
           
   - id: hide_controls_panel
     then:
-      - lvgl.widget.update:
-          id: controls_panel
-          y: 480
       - lambda: |-
           id(panel_visible) = false;
+          lv_obj_set_y(lv_obj_get_child(id(main_page), 1), 480);
 
 # Additional LVGL components for swipe detection and controls panel
 # Update the existing LVGL section by adding our components
