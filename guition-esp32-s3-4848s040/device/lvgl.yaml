@@ -589,7 +589,7 @@ lvgl:
                         text_font: roboto19_font
                     - label:
                         text: !lambda |-
-                          return strlen(id(light_1_entity).state.c_str()) > 0 ? id(light_1_entity).state.c_str() : "Not Configured";
+                          return strlen(id(light_1_entity).state.c_str()) > 0 ? id(light_1_entity).state : "Not Configured";
                         align: center
                         y: 50
                         width: 100
@@ -629,7 +629,7 @@ lvgl:
                         text_font: roboto19_font
                     - label:
                         text: !lambda |-
-                          return strlen(id(light_2_entity).state.c_str()) > 0 ? id(light_2_entity).state.c_str() : "Not Configured";
+                          return strlen(id(light_2_entity).state.c_str()) > 0 ? id(light_2_entity).state : "Not Configured";
                         align: center
                         y: 50
                         width: 100
@@ -669,7 +669,7 @@ lvgl:
                         text_font: roboto19_font
                     - label:
                         text: !lambda |-
-                          return strlen(id(light_3_entity).state.c_str()) > 0 ? id(light_3_entity).state.c_str() : "Not Configured";
+                          return strlen(id(light_3_entity).state.c_str()) > 0 ? id(light_3_entity).state : "Not Configured";
                         align: center
                         y: 50
                         width: 100
@@ -710,7 +710,7 @@ lvgl:
                         text_font: roboto19_font
                     - label:
                         text: !lambda |-
-                          return strlen(id(scene_1_entity).state.c_str()) > 0 ? id(scene_1_entity).state.c_str() : "Not Configured";
+                          return strlen(id(scene_1_entity).state.c_str()) > 0 ? id(scene_1_entity).state : "Not Configured";
                         align: center
                         y: 50
                         width: 100
@@ -750,7 +750,7 @@ lvgl:
                         text_font: roboto19_font
                     - label:
                         text: !lambda |-
-                          return strlen(id(scene_2_entity).state.c_str()) > 0 ? id(scene_2_entity).state.c_str() : "Not Configured";
+                          return strlen(id(scene_2_entity).state.c_str()) > 0 ? id(scene_2_entity).state : "Not Configured";
                         align: center
                         y: 50
                         width: 100
