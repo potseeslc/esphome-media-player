@@ -259,6 +259,13 @@ touchscreen:
           if (id(is_panel_open) || id(was_panel_open)) {
             return;
           }
+          
+          // --- Vertical swipe: room controls panel open/close ---
+          // Swipe up from bottom area: 60px+ upward movement
+          if (dy < -60 && abs(dy) > abs(dx) * 2 && sy >= 420) {
+            id(toggle_controls_panel).execute();
+            return;
+          }
 
           // --- Horizontal swipe: track navigation ---
           if (abs(dx) > 80 && abs(dx) > abs(dy) * 2) {
@@ -414,6 +421,42 @@ script:
                 lv_obj_fade_in(id(media_artist_label), 200, 0);
                 lv_obj_fade_in(id(media_play_pause_button), 200, 0);
                 lv_obj_fade_in(id(media_time_label), 200, 0);
+
+  # -- Toggle controls panel (called by swipe up gesture) --
+  - id: toggle_controls_panel
+    mode: single
+    then:
+      - if:
+          condition:
+            lambda: 'return lv_obj_has_flag(id(controls_overlay), LV_OBJ_FLAG_HIDDEN);'
+          then:
+            # Show the controls overlay and panel with animation from bottom
+            - lambda: |-
+                lv_obj_clear_flag(id(controls_overlay), LV_OBJ_FLAG_HIDDEN);
+                // Animate panel sliding up from bottom
+                lv_anim_t anim;
+                lv_anim_init(&anim);
+                lv_anim_set_var(&anim, id(controls_panel));
+                lv_anim_set_exec_cb(&anim, (lv_anim_exec_xcb_t)lv_obj_set_y);
+                lv_anim_set_values(&anim, 480, 320); // Move from bottom (y=480) to visible position (y=320)
+                lv_anim_set_time(&anim, 300);
+                lv_anim_set_path_cb(&anim, lv_anim_path_ease_in_out);
+                lv_anim_start(&anim);
+          else:
+            # Hide the controls overlay and panel with animation to bottom
+            - lambda: |-
+                // Animate panel sliding down to bottom
+                lv_anim_t anim;
+                lv_anim_init(&anim);
+                lv_anim_set_var(&anim, id(controls_panel));
+                lv_anim_set_exec_cb(&anim, (lv_anim_exec_xcb_t)lv_obj_set_y);
+                lv_anim_set_values(&anim, 320, 480); // Move from visible position (y=320) to bottom (y=480)
+                lv_anim_set_time(&anim, 300);
+                lv_anim_set_path_cb(&anim, lv_anim_path_ease_in_out);
+                lv_anim_set_ready_cb(&anim, [](lv_anim_t* a) {
+                  lv_obj_add_flag(id(controls_overlay), LV_OBJ_FLAG_HIDDEN);
+                });
+                lv_anim_start(&anim);
 
 
 # -----------------------------------------------------------------------------
