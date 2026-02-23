@@ -538,7 +538,7 @@ lvgl:
                               text: "Room Controls"
                               text_font: roboto24_font
                               text_color: 0xFFFFFF
-                              align: left
+                              text_align: left
                               width: 380
                               height: 30
                           
@@ -593,7 +593,7 @@ lvgl:
                                     text: "Lights"
                                     text_font: roboto19_font
                                     text_color: 0xCCCCCC
-                                    align: left
+                                    text_align: left
                                     y: 0
                                     width: 100
                                     height: 20
@@ -676,7 +676,7 @@ lvgl:
                                     text: "Scenes"
                                     text_font: roboto19_font
                                     text_color: 0xCCCCCC
-                                    align: left
+                                    text_align: left
                                     y: 0
                                     width: 100
                                     height: 20
