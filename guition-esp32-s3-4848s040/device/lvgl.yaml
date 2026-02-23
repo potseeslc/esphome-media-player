@@ -536,7 +536,7 @@ lvgl:
                         widgets:
                           - label:
                               text: "Room Controls"
-                              text_font: roboto24_font
+                              text_font: roboto30_font
                               text_color: 0xFFFFFF
                               text_align: left
                               width: 380
