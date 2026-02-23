@@ -75,6 +75,10 @@ api:
 # View logs in ESPHome dashboard or via serial connection.
 # -----------------------------------------------------------------------------
 logger:
+  level: DEBUG
+  logs:
+    lvgl: DEBUG
+    online_image: WARN
 
 
 # -----------------------------------------------------------------------------
@@ -421,33 +425,33 @@ script:
     then:
       - if:
           condition:
-            lambda: 'return lv_obj_has_flag(id(controls_panel), LV_OBJ_FLAG_HIDDEN);'
+            lambda: 'return lv_obj_has_flag(id(controls_overlay), LV_OBJ_FLAG_HIDDEN);'
           then:
-            # Show the controls panel with animation from bottom
+            # Show the controls overlay and panel with animation from bottom
             - lambda: |-
-                lv_obj_clear_flag(id(controls_panel), LV_OBJ_FLAG_HIDDEN);
+                lv_obj_clear_flag(id(controls_overlay), LV_OBJ_FLAG_HIDDEN);
                 // Animate panel sliding up from bottom
                 lv_anim_t anim;
                 lv_anim_init(&anim);
                 lv_anim_set_var(&anim, id(controls_panel));
                 lv_anim_set_exec_cb(&anim, (lv_anim_exec_xcb_t)lv_obj_set_y);
-                lv_anim_set_values(&anim, 480, 0); // Move from bottom (y=480) to top (y=0)
+                lv_anim_set_values(&anim, 480, 320); // Move from bottom (y=480) to visible position (y=320)
                 lv_anim_set_time(&anim, 300);
                 lv_anim_set_path_cb(&anim, lv_anim_path_ease_in_out);
                 lv_anim_start(&anim);
           else:
-            # Hide the controls panel with animation to bottom
+            # Hide the controls overlay and panel with animation to bottom
             - lambda: |-
                 // Animate panel sliding down to bottom
                 lv_anim_t anim;
                 lv_anim_init(&anim);
                 lv_anim_set_var(&anim, id(controls_panel));
                 lv_anim_set_exec_cb(&anim, (lv_anim_exec_xcb_t)lv_obj_set_y);
-                lv_anim_set_values(&anim, 0, 480); // Move from top (y=0) to bottom (y=480)
+                lv_anim_set_values(&anim, 320, 480); // Move from visible position (y=320) to bottom (y=480)
                 lv_anim_set_time(&anim, 300);
                 lv_anim_set_path_cb(&anim, lv_anim_path_ease_in_out);
                 lv_anim_set_ready_cb(&anim, [](lv_anim_t* a) {
-                  lv_obj_add_flag(id(controls_panel), LV_OBJ_FLAG_HIDDEN);
+                  lv_obj_add_flag(id(controls_overlay), LV_OBJ_FLAG_HIDDEN);
                 });
                 lv_anim_start(&anim);
 

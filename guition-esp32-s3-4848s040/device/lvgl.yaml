@@ -6,7 +6,7 @@
 # =============================================================================
 
 lvgl:
-  buffer_size: 25%
+  buffer_size: 50%
 
   pages:
     - id: main_page
@@ -493,15 +493,15 @@ lvgl:
               - logger.log: "Swipe detection area clicked"
               - script.execute: toggle_controls_panel
     
-        # Add controls panel that appears when swiped up (full screen)
+        # Add semi-transparent overlay for dimming background
         - obj:
-            id: controls_panel
+            id: controls_overlay
             x: 0
-            y: 480  # Initially hidden below the screen
+            y: 0
             width: 480
             height: 480
             bg_color: 0x000000
-            bg_opa: 100%
+            bg_opa: 90%  # Semi-transparent black overlay
             radius: 0
             border_width: 0
             pad_all: 0
@@ -509,252 +509,240 @@ lvgl:
             scrollbar_mode: "off"
             hidden: true
             widgets:
-              # Header with title
-              - label:
-                  text: "Room Controls"
-                  text_font: roboto30_font
-                  text_color: 0xFFFFFF
-                  align: center
-                  y: -200
-                  width: 400
-                  height: 36
-                  text_align: center
-              
-              # Close button
-              - button:
-                  id: close_controls_button
-                  x: 440
-                  y: 10
-                  width: 30
-                  height: 30
-                  bg_color: 0xFF0000
-                  bg_opa: 80%
-                  border_width: 0
-                  radius: 15
-                  clickable: true
-                  on_click:
-                    - script.execute: toggle_controls_panel
-                  widgets:
-                    - label:
-                        text: "X"
-                        align: center
-                        text_color: 0xFFFFFF
-                        text_font: roboto19_font
-              
-              # Section headers
-              - label:
-                  text: "Lights"
-                  x: 20
-                  y: 70
-                  text_color: 0xCCCCCC
-                  text_font: roboto19_font
-              
-              - label:
-                  text: "Scenes"
-                  x: 250
-                  y: 70
-                  text_color: 0xCCCCCC
-                  text_font: roboto19_font
-              
-              # Light control buttons (styled like Home Assistant)
-              - button:
-                  id: light1_button
-                  x: 20
-                  y: 110
-                  width: 100
-                  height: 100
-                  bg_color: 0x333333
+              # Add controls panel that appears when swiped up (overlay style)
+              - obj:
+                  id: controls_panel
+                  x: 0
+                  y: 320  # Initially hidden below the screen (480-160)
+                  width: 480
+                  height: 160
+                  bg_color: 0x1a1a1a  # Dark surface color
                   bg_opa: 100%
+                  radius: 24  # Rounded top corners
                   border_width: 1
-                  border_color: 0x555555
-                  radius: 50
-                  clickable: true
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return strlen(id(light_1_entity).state.c_str()) > 0;'
-                        then:
-                          - homeassistant.service:
-                              service: light.toggle
-                              data_template:
-                                entity_id: !lambda 'return id(light_1_entity).state;'
+                  border_color: 0x333333
+                  pad_all: 16  # 16px padding
+                  scrollable: false
+                  scrollbar_mode: "off"
                   widgets:
-                    - label:
-                        text: "Light 1"
-                        align: center
-                        y: 15
-                        width: 100
-                        text_align: center
-                        text_color: 0xFFFFFF
-                        text_font: roboto19_font
-                    - label:
-                        text: !lambda |-
-                          return strlen(id(light_1_entity).state.c_str()) > 0 ? id(light_1_entity).state : "Not Configured";
-                        align: center
-                        y: 50
-                        width: 100
-                        text_align: center
-                        text_color: 0xAAAAAA
-                        text_font: roboto15_font
-              
-              - button:
-                  id: light2_button
-                  x: 140
-                  y: 110
-                  width: 100
-                  height: 100
-                  bg_color: 0x333333
-                  bg_opa: 100%
-                  border_width: 1
-                  border_color: 0x555555
-                  radius: 50
-                  clickable: true
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return strlen(id(light_2_entity).state.c_str()) > 0;'
-                        then:
-                          - homeassistant.service:
-                              service: light.toggle
-                              data_template:
-                                entity_id: !lambda 'return id(light_2_entity).state;'
-                  widgets:
-                    - label:
-                        text: "Light 2"
-                        align: center
-                        y: 15
-                        width: 100
-                        text_align: center
-                        text_color: 0xFFFFFF
-                        text_font: roboto19_font
-                    - label:
-                        text: !lambda |-
-                          return strlen(id(light_2_entity).state.c_str()) > 0 ? id(light_2_entity).state : "Not Configured";
-                        align: center
-                        y: 50
-                        width: 100
-                        text_align: center
-                        text_color: 0xAAAAAA
-                        text_font: roboto15_font
-              
-              - button:
-                  id: light3_button
-                  x: 260
-                  y: 110
-                  width: 100
-                  height: 100
-                  bg_color: 0x333333
-                  bg_opa: 100%
-                  border_width: 1
-                  border_color: 0x555555
-                  radius: 50
-                  clickable: true
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return strlen(id(light_3_entity).state.c_str()) > 0;'
-                        then:
-                          - homeassistant.service:
-                              service: light.toggle
-                              data_template:
-                                entity_id: !lambda 'return id(light_3_entity).state;'
-                  widgets:
-                    - label:
-                        text: "Light 3"
-                        align: center
-                        y: 15
-                        width: 100
-                        text_align: center
-                        text_color: 0xFFFFFF
-                        text_font: roboto19_font
-                    - label:
-                        text: !lambda |-
-                          return strlen(id(light_3_entity).state.c_str()) > 0 ? id(light_3_entity).state : "Not Configured";
-                        align: center
-                        y: 50
-                        width: 100
-                        text_align: center
-                        text_color: 0xAAAAAA
-                        text_font: roboto15_font
-              
-              # Scene buttons (styled like Home Assistant)
-              - button:
-                  id: scene1_button
-                  x: 20
-                  y: 230
-                  width: 100
-                  height: 100
-                  bg_color: 0x336699
-                  bg_opa: 100%
-                  border_width: 1
-                  border_color: 0x555555
-                  radius: 50
-                  clickable: true
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return strlen(id(scene_1_entity).state.c_str()) > 0;'
-                        then:
-                          - homeassistant.service:
-                              service: scene.turn_on
-                              data_template:
-                                entity_id: !lambda 'return id(scene_1_entity).state;'
-                  widgets:
-                    - label:
-                        text: "Scene 1"
-                        align: center
-                        y: 15
-                        width: 100
-                        text_align: center
-                        text_color: 0xFFFFFF
-                        text_font: roboto19_font
-                    - label:
-                        text: !lambda |-
-                          return strlen(id(scene_1_entity).state.c_str()) > 0 ? id(scene_1_entity).state : "Not Configured";
-                        align: center
-                        y: 50
-                        width: 100
-                        text_align: center
-                        text_color: 0xAAAAAA
-                        text_font: roboto15_font
-              
-              - button:
-                  id: scene2_button
-                  x: 140
-                  y: 230
-                  width: 100
-                  height: 100
-                  bg_color: 0x996633
-                  bg_opa: 100%
-                  border_width: 1
-                  border_color: 0x555555
-                  radius: 50
-                  clickable: true
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return strlen(id(scene_2_entity).state.c_str()) > 0;'
-                        then:
-                          - homeassistant.service:
-                              service: scene.turn_on
-                              data_template:
-                                entity_id: !lambda 'return id(scene_2_entity).state;'
-                  widgets:
-                    - label:
-                        text: "Scene 2"
-                        align: center
-                        y: 15
-                        width: 100
-                        text_align: center
-                        text_color: 0xFFFFFF
-                        text_font: roboto19_font
-                    - label:
-                        text: !lambda |-
-                          return strlen(id(scene_2_entity).state.c_str()) > 0 ? id(scene_2_entity).state : "Not Configured";
-                        align: center
-                        y: 50
-                        width: 100
-                        text_align: center
-                        text_color: 0xAAAAAA
-                        text_font: roboto15_font
+                    # Header with title and close button
+                    - obj:
+                        x: 0
+                        y: 0
+                        width: 448  # 480 - 2*16 padding
+                        height: 40
+                        bg_color: 0x1a1a1a
+                        bg_opa: 0%  # Transparent container
+                        widgets:
+                          - label:
+                              text: "Room Controls"
+                              text_font: roboto24_font
+                              text_color: 0xFFFFFF
+                              align: left
+                              width: 380
+                              height: 30
+                          
+                          - button:
+                              id: close_controls_button
+                              x: 418  # Positioned at the right
+                              y: 5
+                              width: 30
+                              height: 30
+                              bg_color: 0xFF0000
+                              bg_opa: 80%
+                              border_width: 0
+                              radius: 15
+                              clickable: true
+                              on_click:
+                                - script.execute: toggle_controls_panel
+                              widgets:
+                                - label:
+                                    text: "X"
+                                    align: center
+                                    text_color: 0xFFFFFF
+                                    text_font: roboto19_font
+                    
+                    # Divider line
+                    - obj:
+                        x: 0
+                        y: 45
+                        width: 448
+                        height: 1
+                        bg_color: 0x333333
+                        bg_opa: 100%
+                    
+                    # Flex layout container for content (2 columns)
+                    - obj:
+                        x: 0
+                        y: 55
+                        width: 448
+                        height: 90
+                        bg_color: 0x1a1a1a
+                        bg_opa: 0%
+                        widgets:
+                          # Lights section
+                          - obj:
+                              x: 0
+                              y: 0
+                              width: 224
+                              height: 90
+                              bg_color: 0x1a1a1a
+                              bg_opa: 0%
+                              widgets:
+                                - label:
+                                    text: "Lights"
+                                    text_font: roboto19_font
+                                    text_color: 0xCCCCCC
+                                    align: left
+                                    y: 0
+                                    width: 100
+                                    height: 20
+                                
+                                # Light control tiles (flex layout)
+                                - button:
+                                    id: light1_button
+                                    x: 0
+                                    y: 25
+                                    width: 100
+                                    height: 50
+                                    bg_color: 0x333333
+                                    bg_opa: 100%
+                                    border_width: 1
+                                    border_color: 0x555555
+                                    radius: 8  # Less rounded corners for tiles
+                                    clickable: true
+                                    on_click:
+                                      - if:
+                                          condition:
+                                            lambda: 'return strlen(id(light_1_entity).state.c_str()) > 0;'
+                                          then:
+                                            - homeassistant.service:
+                                                service: light.toggle
+                                                data_template:
+                                                  entity_id: !lambda 'return id(light_1_entity).state;'
+                                    widgets:
+                                      - label:
+                                          text: !lambda |-
+                                            return strlen(id(light_1_entity).state.c_str()) > 0 ? id(light_1_entity).state : "Not Configured";
+                                          align: center
+                                          y: 15
+                                          width: 100
+                                          text_align: center
+                                          text_color: 0xFFFFFF
+                                          text_font: roboto15_font
+                                
+                                - button:
+                                    id: light2_button
+                                    x: 112  # Spacing between tiles
+                                    y: 25
+                                    width: 100
+                                    height: 50
+                                    bg_color: 0x333333
+                                    bg_opa: 100%
+                                    border_width: 1
+                                    border_color: 0x555555
+                                    radius: 8
+                                    clickable: true
+                                    on_click:
+                                      - if:
+                                          condition:
+                                            lambda: 'return strlen(id(light_2_entity).state.c_str()) > 0;'
+                                          then:
+                                            - homeassistant.service:
+                                                service: light.toggle
+                                                data_template:
+                                                  entity_id: !lambda 'return id(light_2_entity).state;'
+                                    widgets:
+                                      - label:
+                                          text: !lambda |-
+                                            return strlen(id(light_2_entity).state.c_str()) > 0 ? id(light_2_entity).state : "Not Configured";
+                                          align: center
+                                          y: 15
+                                          width: 100
+                                          text_align: center
+                                          text_color: 0xFFFFFF
+                                          text_font: roboto15_font
+                          
+                          # Scenes section
+                          - obj:
+                              x: 224
+                              y: 0
+                              width: 224
+                              height: 90
+                              bg_color: 0x1a1a1a
+                              bg_opa: 0%
+                              widgets:
+                                - label:
+                                    text: "Scenes"
+                                    text_font: roboto19_font
+                                    text_color: 0xCCCCCC
+                                    align: left
+                                    y: 0
+                                    width: 100
+                                    height: 20
+                                
+                                # Scene chips (wrap layout)
+                                - button:
+                                    id: scene1_button
+                                    x: 0
+                                    y: 25
+                                    width: 100
+                                    height: 30
+                                    bg_color: 0x336699
+                                    bg_opa: 100%
+                                    border_width: 1
+                                    border_color: 0x555555
+                                    radius: 15  # Pill-shaped chips
+                                    clickable: true
+                                    on_click:
+                                      - if:
+                                          condition:
+                                            lambda: 'return strlen(id(scene_1_entity).state.c_str()) > 0;'
+                                          then:
+                                            - homeassistant.service:
+                                                service: scene.turn_on
+                                                data_template:
+                                                  entity_id: !lambda 'return id(scene_1_entity).state;'
+                                    widgets:
+                                      - label:
+                                          text: !lambda |-
+                                            return strlen(id(scene_1_entity).state.c_str()) > 0 ? id(scene_1_entity).state : "Not Configured";
+                                          align: center
+                                          y: 5
+                                          width: 100
+                                          text_align: center
+                                          text_color: 0xFFFFFF
+                                          text_font: roboto15_font
+                                
+                                - button:
+                                    id: scene2_button
+                                    x: 112
+                                    y: 25
+                                    width: 100
+                                    height: 30
+                                    bg_color: 0x996633
+                                    bg_opa: 100%
+                                    border_width: 1
+                                    border_color: 0x555555
+                                    radius: 15
+                                    clickable: true
+                                    on_click:
+                                      - if:
+                                          condition:
+                                            lambda: 'return strlen(id(scene_2_entity).state.c_str()) > 0;'
+                                          then:
+                                            - homeassistant.service:
+                                                service: scene.turn_on
+                                                data_template:
+                                                  entity_id: !lambda 'return id(scene_2_entity).state;'
+                                    widgets:
+                                      - label:
+                                          text: !lambda |-
+                                            return strlen(id(scene_2_entity).state.c_str()) > 0 ? id(scene_2_entity).state : "Not Configured";
+                                          align: center
+                                          y: 5
+                                          width: 100
+                                          text_align: center
+                                          text_color: 0xFFFFFF
+                                          text_font: roboto15_font
 
