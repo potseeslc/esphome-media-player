@@ -6,7 +6,7 @@
 # =============================================================================
 
 lvgl:
-  buffer_size: 50%
+  buffer_size: 25%
 
   pages:
     - id: main_page
@@ -481,19 +481,7 @@ lvgl:
                   height: 80
                   text_align: center
 
-        # Add invisible swipe detection area for gestures (full screen)
-        - obj:
-            id: swipe_detection_area
-            x: 0
-            y: 0
-            width: 480
-            height: 480
-            clickable: true
-            on_click:
-              - logger.log: "Swipe detection area clicked"
-              - script.execute: toggle_controls_panel
-    
-        # Add semi-transparent overlay for dimming background
+        # Add semi-transparent overlay for dimming background when controls panel appears
         - obj:
             id: controls_overlay
             x: 0
@@ -746,3 +734,13 @@ lvgl:
                                           text_color: 0xFFFFFF
                                           text_font: roboto15_font
 
+        # Invisible touch area for swipe detection
+        - obj:
+            x: 0
+            y: 0
+            width: 480
+            height: 480
+            clickable: true
+            on_click:
+              - logger.log: "Swipe detection area clicked"
+              - script.execute: toggle_controls_panel
